@@ -7,9 +7,7 @@ namespace Environment
 {
     public class Box : MonoBehaviour
     {
-        [SerializeField] private ParticleSystem boxParticle;
         [SerializeField] private Transform message;
-        [SerializeField] private Transform textObject;
         private Animator _animator;
 
         private void Awake()
@@ -17,25 +15,35 @@ namespace Environment
             _animator = GetComponent<Animator>();
         }
 
-        private void OnTriggerEnter(Collider other)
+        protected void OnTriggerEnter(Collider other)
         {
             if (other.tag.CompareTo("Instrument") == Decimal.Zero)
             {
-                print($"Ball Enter box name: {gameObject.name}");
-                var playerPosition = MainPlayer.Instance.transform.position;
-                message.rotation = Quaternion.LookRotation(new Vector3(playerPosition.x,
-                    transform.position.y, playerPosition.z) - transform.position, Vector3.up);
-                _animator.SetTrigger("Blast");
-                other.GetComponent<InstrumentBase>().EnterTheBox();
+                OnInstrumentEnter(other.GetComponent<InstrumentBase>());
+                
             }
         }
+
+        protected virtual void OnInstrumentEnter(InstrumentBase instrument)
+        {
+            var playerPosition = MainPlayer.Instance.transform.position;
+            message.rotation = Quaternion.LookRotation(new Vector3(playerPosition.x,
+                transform.position.y, playerPosition.z) - transform.position, Vector3.up);
+            _animator.SetTrigger("Blast");
+            instrument.EnterTheBox();
+        }
         
-        private void OnTriggerExit(Collider other)
+        protected void OnTriggerExit(Collider other)
         {
             if (other.tag.CompareTo("Instrument") == Decimal.Zero)
             {
-                other.GetComponent<InstrumentBase>().ExitTheBox();
+                OnInstrumentExit(other.GetComponent<InstrumentBase>());
             }
+        }
+
+        protected virtual void OnInstrumentExit(InstrumentBase instrument)
+        {
+            instrument.ExitTheBox();
         }
     }
 }
