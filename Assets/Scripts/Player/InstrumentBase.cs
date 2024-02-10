@@ -24,6 +24,18 @@ namespace Player
             _grableInteractable.activated.AddListener(_ => _grableInteractable.movementType = XRBaseInteractable.MovementType.Instantaneous);
             _grableInteractable.deactivated.AddListener(_ => _grableInteractable.movementType = XRBaseInteractable.MovementType.VelocityTracking);
         }
+        
+        private void Start()
+        {
+            _messagePanel = Instantiate(panelPrefab, transform.position + panelPositionOffset, Quaternion.identity);
+            _messagePanel.GetComponentInChildren<TextMeshPro>().text = message;
+            _messagePanel.transform.GetChild(0).transform.localPosition = panelPositionOffset;
+        }
+
+        private void Update()
+        {
+            _messagePanel.transform.position = transform.position;
+        }
 
         private void BallSelected(SelectEnterEventArgs arg0)
         {
@@ -46,17 +58,6 @@ namespace Player
                     transform.position.y, playerPosition.z), Vector3.up);
                 _messagePanel.SetActive(true);
             }
-        }
-
-        private void Start()
-        {
-            _messagePanel = Instantiate(panelPrefab, transform.position + panelPositionOffset, Quaternion.identity);
-            _messagePanel.GetComponentInChildren<TextMeshPro>().text = message;
-        }
-
-        private void Update()
-        {
-            _messagePanel.transform.position = transform.position + panelPositionOffset;
         }
 
         public void EnterTheBox()
