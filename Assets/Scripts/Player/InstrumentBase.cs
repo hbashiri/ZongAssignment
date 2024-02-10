@@ -13,22 +13,39 @@ namespace Player
 
         private XRGrabInteractable _grableInteractable;
         private GameObject _messagePanel;
+        private bool _boxState;
+        private bool _selectState;
 
         private void Awake()
         {
             _grableInteractable = GetComponent<XRGrabInteractable>();
-            _grableInteractable.firstSelectEntered.AddListener( _ => _messagePanel.SetActive(false));
-            _grableInteractable.lastSelectExited.AddListener(SetMessagePanel);
+            _grableInteractable.firstSelectEntered.AddListener(BallSelected);
+            _grableInteractable.lastSelectExited.AddListener(BallUnselected);
             _grableInteractable.activated.AddListener(_ => _grableInteractable.movementType = XRBaseInteractable.MovementType.Instantaneous);
             _grableInteractable.deactivated.AddListener(_ => _grableInteractable.movementType = XRBaseInteractable.MovementType.VelocityTracking);
         }
 
-        private void SetMessagePanel(SelectExitEventArgs eventData)
+        private void BallSelected(SelectEnterEventArgs arg0)
         {
-            var playerPosition = MainPlayer.Instance.transform.position;
-            _messagePanel.transform.rotation = Quaternion.LookRotation(new Vector3(playerPosition.x,
-                transform.position.y, playerPosition.z) - transform.position, Vector3.up);
-            _messagePanel.SetActive(true);
+            _selectState = true;
+            _messagePanel.SetActive(false);
+        }
+        
+        private void BallUnselected(SelectExitEventArgs eventData)
+        {
+            _selectState = false;
+            Invoke(nameof(EnableMessagePanel), 1f);
+        }
+
+        private void EnableMessagePanel()
+        {
+            if (!_boxState && !_selectState)
+            {
+                var playerPosition = MainPlayer.Instance.transform.position;
+                _messagePanel.transform.rotation = Quaternion.LookRotation(transform.position - new Vector3(playerPosition.x,
+                    transform.position.y, playerPosition.z), Vector3.up);
+                _messagePanel.SetActive(true);
+            }
         }
 
         private void Start()
@@ -40,6 +57,17 @@ namespace Player
         private void Update()
         {
             _messagePanel.transform.position = transform.position + panelPositionOffset;
+        }
+
+        public void EnterTheBox()
+        {
+            _messagePanel.SetActive(false);
+            _boxState = true;
+        }
+
+        public void ExitTheBox()
+        {
+            _boxState = false;
         }
     }
 }

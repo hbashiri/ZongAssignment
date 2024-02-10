@@ -19,7 +19,6 @@ namespace Environment
 
         private void OnTriggerEnter(Collider other)
         {
-            print($"triggerd: {other.tag}");
             if (other.tag.CompareTo("Instrument") == Decimal.Zero)
             {
                 print($"Ball Enter box name: {gameObject.name}");
@@ -27,6 +26,15 @@ namespace Environment
                 message.rotation = Quaternion.LookRotation(new Vector3(playerPosition.x,
                     transform.position.y, playerPosition.z) - transform.position, Vector3.up);
                 _animator.SetTrigger("Blast");
+                other.GetComponent<InstrumentBase>().EnterTheBox();
+            }
+        }
+        
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.tag.CompareTo("Instrument") == Decimal.Zero)
+            {
+                other.GetComponent<InstrumentBase>().ExitTheBox();
             }
         }
     }
