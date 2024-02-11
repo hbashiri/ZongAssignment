@@ -14,7 +14,6 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private float distanceToDisappearMenu;
 
     private Transform _playerPosition;
-    private Transform _menuPlaceHolder;
     private bool _isOpened;
     private FadePanel _fadePanelSystem;
     private Vector3 _playerPositionOnSpawn;
@@ -32,10 +31,9 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
-        _playerPosition = MainPlayer.Instance.transform;
-        _menuPlaceHolder = MainPlayer.Instance.MenuPlaceHolder;
+        _playerPosition = MainPlayer.Instance.CameraTransform;
     }
-
+    
     private void Update()
     {
         if (_isOpened && Vector3.Distance(_playerPosition.position, _playerPositionOnSpawn) > distanceToDisappearMenu)
@@ -47,8 +45,8 @@ public class MainMenu : MonoBehaviour
     public void ActivateMainMenu()
     {
         _playerPositionOnSpawn = MainPlayer.Instance.transform.position;
-        transform.position = _menuPlaceHolder.position;
-        transform.rotation = _menuPlaceHolder.rotation;
+        transform.position = MainPlayer.Instance.GetDefaultMenuPosition();
+        transform.rotation = Quaternion.Euler(0f,MainPlayer.Instance.CameraTransform.rotation.eulerAngles.y, 0);
         mainMenuPanel.SetActive(true);
         _fadePanelSystem.FadeIn(()=>{});
         _isOpened = true;

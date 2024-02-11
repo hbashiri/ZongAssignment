@@ -9,13 +9,16 @@ namespace VrScripts
     {
         [SerializeField] private InputActionProperty pinchAnimationAction;
         [SerializeField] private InputActionProperty gripAnimationAction;
+        [SerializeField] private bool isLeft;
+        
         private Animator _handAnimator;
         private AudioSource _audioSource;
-        private bool isLeft;
+        
 
         private void Awake()
         {
             _handAnimator = GetComponent<Animator>();
+            _audioSource = GetComponent<AudioSource>();
             pinchAnimationAction.action.performed += PinchAction;
             gripAnimationAction.action.performed += GripAction;
         }

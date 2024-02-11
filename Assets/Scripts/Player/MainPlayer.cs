@@ -9,19 +9,19 @@ namespace Player
     public class MainPlayer : MonoBehaviour
     {
         public static MainPlayer Instance { get; private set; }
-        public HandAnimationManager LeftHand;
-        public HandAnimationManager RightHand;
-
-        [SerializeField] private Transform menuPlaceHolder;
-        [SerializeField] private InputActionProperty menuInputAction;
+        [HideInInspector] public HandAnimationManager LeftHand;
+        [HideInInspector] public HandAnimationManager RightHand;
         
+        [SerializeField] private Transform cameraTransform;
+        [SerializeField] private InputActionProperty menuInputAction;
+        [SerializeField] private float uiDistance;
         private TeleportationProvider _teleportationProvider;
         private XRGrabInteractable leftHandGrabItem;
         private XRGrabInteractable rightHandGrabItem;
 
         public XRGrabInteractable LeftHandGrabItem => leftHandGrabItem;
         public XRGrabInteractable RightHandGrabItem => rightHandGrabItem;
-        public Transform MenuPlaceHolder => menuPlaceHolder;
+        public Transform CameraTransform => cameraTransform;
 
         private void Awake()
         {
@@ -29,7 +29,7 @@ namespace Player
             _teleportationProvider = GetComponentInChildren<TeleportationProvider>();
             menuInputAction.action.performed += OnMenuClicked;
         }
-
+        
         public void AssignHandGrabItem(bool isLeft, XRGrabInteractable item)
         {
             if (isLeft)
@@ -60,7 +60,7 @@ namespace Player
         {
             TeleportPlayer(checkPoint);
             MainMenu.Instance.ActivateMainMenu(checkPoint.position,
-                checkPoint.position + checkPoint.forward * 3 + checkPoint.up,
+                checkPoint.position + new Vector3(0f, 1.5f, uiDistance),
                 checkPoint.rotation);
         }
         
@@ -73,7 +73,14 @@ namespace Player
             };
             _teleportationProvider.QueueTeleportRequest(teleportationRequest);
         }
-        
+
+        public Vector3 GetDefaultMenuPosition()
+        {
+            var cameraPosition = transform.position + uiDistance * 
+                new Vector3(Mathf.Sin(cameraTransform.eulerAngles.y* Mathf.Deg2Rad), 0f,
+                    Mathf.Cos(cameraTransform.eulerAngles.y * Mathf.Deg2Rad)) + Vector3.up * 1.5f;
+            return cameraPosition;
+        }
 
         private void OnMenuClicked(InputAction.CallbackContext inputData)
         {

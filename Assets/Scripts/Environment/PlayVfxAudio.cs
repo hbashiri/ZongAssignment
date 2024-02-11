@@ -8,14 +8,15 @@ namespace Environment
     public class PlayVfxAudio : VFXOutputEventAbstractHandler
     {
         public override bool canExecuteInEditor { get; }
-        [SerializeField] private AudioSource _audioSource;
+        [SerializeField] private AudioClip sfxAudioClip;
+        [SerializeField] private AudioSource audioSource;
         
         
         public override void OnVFXOutputEvent(VFXEventAttribute eventAttribute)
         {
-            if (_audioSource != null)
+            if (audioSource != null)
             {
-                _audioSource.Play();
+                audioSource.PlayOneShot(sfxAudioClip);
             }
         }
 

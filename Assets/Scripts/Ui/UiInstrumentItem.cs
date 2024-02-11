@@ -37,9 +37,8 @@ public class UiInstrumentItem : MonoBehaviour
             HideInstrument();
             return;
         }
-
-        _isOpen = true;
         _uiInstrumentPanel.HideAllInstruments();
+        _isOpen = true;
         _item.gameObject.SetActive(true);
         _item.transform.position = _uiInstrumentPanel.InstrumentSpawnPoint.position;
     }
