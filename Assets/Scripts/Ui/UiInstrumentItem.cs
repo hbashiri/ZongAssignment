@@ -21,12 +21,10 @@ public class UiInstrumentItem : MonoBehaviour
         GetComponent<Button>().onClick.AddListener(OnClick);
         _uiInstrumentPanel.SubscribeOnSelectInstrument(HideInstrument);
         item.gameObject.SetActive(false);
-        item.ItemSelectionEvent += OnItemRetrieve;
     }
 
     public void OnItemRetrieve()
     {
-        _item.ItemSelectionEvent -= OnItemRetrieve;
         _item = null;
         MainMenu.Instance.DeactivateMainMenu();
         Debug.Log("Destroy UiItem");

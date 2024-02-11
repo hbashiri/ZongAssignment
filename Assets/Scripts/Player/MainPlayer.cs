@@ -2,17 +2,18 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit;
+using VrScripts;
 
 namespace Player
 {
     public class MainPlayer : MonoBehaviour
     {
         public static MainPlayer Instance { get; private set; }
+        public HandAnimationManager LeftHand;
+        public HandAnimationManager RightHand;
 
         [SerializeField] private Transform menuPlaceHolder;
         [SerializeField] private InputActionProperty menuInputAction;
-        [SerializeField] private Transform leftHand;
-        [SerializeField] private Transform rightHand;
         
         private TeleportationProvider _teleportationProvider;
         private XRGrabInteractable leftHandGrabItem;
@@ -34,10 +35,12 @@ namespace Player
             if (isLeft)
             {
                 leftHandGrabItem = item;
+                LeftHand.PlaySfx();
             }
             else
             {
                 rightHandGrabItem = item;
+                RightHand.PlaySfx();
             }
         }
 

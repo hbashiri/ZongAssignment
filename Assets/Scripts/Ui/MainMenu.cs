@@ -18,6 +18,7 @@ public class MainMenu : MonoBehaviour
     private bool _isOpened;
     private FadePanel _fadePanelSystem;
     private Vector3 _playerPositionOnSpawn;
+    private AudioSource _audioSource;
 
     public static MainMenu Instance { get; private set; }
     public UiInstrumentPanel InstrumentPanel => uiInstrumentPanel;
@@ -26,6 +27,7 @@ public class MainMenu : MonoBehaviour
     {
         Instance = this;
         _fadePanelSystem = GetComponent<FadePanel>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     private void Start()
@@ -84,5 +86,10 @@ public class MainMenu : MonoBehaviour
     public void CollapseWeaponCategory()
     {
         uiWeaponPanel.CollapseWeaponCategory();
+    }
+
+    public void PlaySfx()
+    {
+        _audioSource.Play();
     }
 }

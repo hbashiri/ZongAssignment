@@ -12,8 +12,7 @@ namespace Player
         [SerializeField] private GameObject panelPrefab;
         [SerializeField] private Vector3 panelPositionOffset;
         [SerializeField] private Sprite iconImage;
-        
-        public Action ItemSelectionEvent ;
+
         private UiInstrumentItem _uiInstrumentItem;
 
         private XRGrabInteractable _grableInteractable;

@@ -9,10 +9,12 @@ namespace Environment
     {
         [SerializeField] private Transform message;
         private Animator _animator;
+        protected AudioSource _audioSource;
 
         private void Awake()
         {
             _animator = GetComponent<Animator>();
+            _audioSource = GetComponent<AudioSource>();
         }
 
         protected void OnTriggerEnter(Collider other)
@@ -20,8 +22,8 @@ namespace Environment
             if (other.tag.CompareTo("Instrument") == Decimal.Zero)
             {
                 OnInstrumentEnter(other.GetComponent<InstrumentBase>());
-                
             }
+            _audioSource.Play();
         }
 
         protected virtual void OnInstrumentEnter(InstrumentBase instrument)
