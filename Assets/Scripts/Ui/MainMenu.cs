@@ -33,7 +33,12 @@ public class MainMenu : MonoBehaviour
     {
         _playerPosition = MainPlayer.Instance.CameraTransform;
     }
-    
+
+    private void OnEnable()
+    {
+        ActivateMainMenu();
+    }
+
     private void Update()
     {
         if (_isOpened && Vector3.Distance(_playerPosition.position, _playerPositionOnSpawn) > distanceToDisappearMenu)

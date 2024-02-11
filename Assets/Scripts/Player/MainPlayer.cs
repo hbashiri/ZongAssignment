@@ -60,7 +60,7 @@ namespace Player
         {
             TeleportPlayer(checkPoint);
             MainMenu.Instance.ActivateMainMenu(checkPoint.position,
-                checkPoint.position + new Vector3(0f, 1.5f, uiDistance),
+                checkPoint.position + new Vector3(0f, cameraTransform.transform.position.y, uiDistance),
                 checkPoint.rotation);
         }
         
@@ -76,9 +76,9 @@ namespace Player
 
         public Vector3 GetDefaultMenuPosition()
         {
-            var cameraPosition = transform.position + uiDistance * 
+            var cameraPosition = cameraTransform.position + uiDistance * 
                 new Vector3(Mathf.Sin(cameraTransform.eulerAngles.y* Mathf.Deg2Rad), 0f,
-                    Mathf.Cos(cameraTransform.eulerAngles.y * Mathf.Deg2Rad)) + Vector3.up * 1.5f;
+                    Mathf.Cos(cameraTransform.eulerAngles.y * Mathf.Deg2Rad));
             return cameraPosition;
         }
 

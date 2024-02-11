@@ -9,7 +9,7 @@ namespace Environment
         [SerializeField] private Transform checkPoint;
         private void Awake()
         {
-            
+            _audioSource = GetComponent<AudioSource>();
         }
         
         protected override void OnInstrumentEnter(InstrumentBase instrument)
