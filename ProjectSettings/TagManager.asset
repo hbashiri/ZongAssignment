@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Anchor
   - Instrument
+  - LeftHand
+  - RightHand
   layers:
   - Default
   - TransparentFX

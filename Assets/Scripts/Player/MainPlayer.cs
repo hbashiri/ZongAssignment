@@ -7,14 +7,29 @@ namespace Player
     public class MainPlayer : MonoBehaviour
     {
         public static MainPlayer Instance { get; private set; }
-        public LocomotionSystem LocomotionSystem;
         public TeleportationProvider TeleportationProvider;
+        private GameObject leftHandGrabItem;
+        private GameObject rightHandGrabItem;
 
+        public GameObject LeftHandGrabItem => leftHandGrabItem;
+        public GameObject RightHandGrabItem => rightHandGrabItem;
+        
         private void Awake()
         {
             Instance = this;
-            LocomotionSystem = GetComponentInChildren<LocomotionSystem>();
             TeleportationProvider = GetComponentInChildren<TeleportationProvider>();
+        }
+
+        public void AssignHandGrabItem(bool isLeft, GameObject item)
+        {
+            if (isLeft)
+            {
+                leftHandGrabItem = item;
+            }
+            else
+            {
+                rightHandGrabItem = item;
+            }
         }
     }
 }
