@@ -34,11 +34,6 @@ public class MainMenu : MonoBehaviour
         _playerPosition = MainPlayer.Instance.CameraTransform;
     }
 
-    private void OnEnable()
-    {
-        ActivateMainMenu();
-    }
-
     private void Update()
     {
         if (_isOpened && Vector3.Distance(_playerPosition.position, _playerPositionOnSpawn) > distanceToDisappearMenu)
@@ -49,7 +44,7 @@ public class MainMenu : MonoBehaviour
 
     public void ActivateMainMenu()
     {
-        _playerPositionOnSpawn = MainPlayer.Instance.transform.position;
+        _playerPositionOnSpawn = _playerPosition.position;
         transform.position = MainPlayer.Instance.GetDefaultMenuPosition();
         transform.rotation = Quaternion.Euler(0f,MainPlayer.Instance.CameraTransform.rotation.eulerAngles.y, 0);
         mainMenuPanel.SetActive(true);

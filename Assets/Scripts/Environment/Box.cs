@@ -28,7 +28,7 @@ namespace Environment
 
         protected virtual void OnInstrumentEnter(InstrumentBase instrument)
         {
-            var playerPosition = MainPlayer.Instance.transform.position;
+            var playerPosition = MainPlayer.Instance.CameraTransform.position;
             message.rotation = Quaternion.LookRotation(new Vector3(playerPosition.x,
                 transform.position.y, playerPosition.z) - transform.position, Vector3.up);
             _animator.SetTrigger("Blast");

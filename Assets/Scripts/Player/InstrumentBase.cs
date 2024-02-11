@@ -141,7 +141,7 @@ namespace Player
         private IEnumerator EnableMessage()
         {
             yield return new WaitForSeconds(1f);
-            var playerPosition = MainPlayer.Instance.transform.position;
+            var playerPosition = MainPlayer.Instance.CameraTransform.position;
             _messagePanel.transform.rotation = Quaternion.LookRotation(transform.position - new Vector3(playerPosition.x,
                 transform.position.y, playerPosition.z), Vector3.up);
             MessagePanelToggle(true);
