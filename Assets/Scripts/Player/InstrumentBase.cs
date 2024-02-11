@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -20,6 +21,7 @@ namespace Player
         private Rigidbody _rigidbody;
         private bool _boxState;
         private bool _selectState;
+        private Coroutine enableMessageCoroutine;
 
         private void Awake()
         {
@@ -53,16 +55,15 @@ namespace Player
         private void BallSelected(SelectEnterEventArgs eventData)
         {
             _selectState = true;
-            _messagePanel.SetActive(false);
-            Debug.Log(MainMenu.Instance);
-            Debug.Log(MainPlayer.Instance);
+            MessagePanelToggle(false);
+            
             if (_uiInstrumentItem != null)
             {
                 OnRetrieveItemFromInventory();
             }
             else
             {
-                MainMenu.Instance.ActivateMainMenu(MainPlayer.Instance.MenuPlaceHolder);
+                MainMenu.Instance.ActivateMainMenu();
             }
         }
         
@@ -70,13 +71,11 @@ namespace Player
         {
             if (eventData.interactorObject.transform.CompareTag("LeftHand"))
             {
-                print("Release by left hand");
-                MainPlayer.Instance.AssignHandGrabItem(true,  null);
+                MainPlayer.Instance.ReleaseGrabedItem(true);
             }
             else if (eventData.interactorObject.transform.CompareTag("RightHand"))
             {
-                print("Release by right hand");
-                MainPlayer.Instance.AssignHandGrabItem(false, null);
+                MainPlayer.Instance.ReleaseGrabedItem(false);
             }
         }
 
@@ -84,36 +83,45 @@ namespace Player
         {
             if (eventData.interactorObject.transform.CompareTag("LeftHand"))
             {
-                print("Grab by left hand");
-                MainPlayer.Instance.AssignHandGrabItem(true, this.gameObject);
+                MainPlayer.Instance.AssignHandGrabItem(true, _grableInteractable);
             }
             else if (eventData.interactorObject.transform.CompareTag("RightHand"))
             {
-                print("Grab by right hand");
-                MainPlayer.Instance.AssignHandGrabItem(false, this.gameObject);
+                MainPlayer.Instance.AssignHandGrabItem(false, this._grableInteractable);
             }
         }
 
         private void BallUnselected(SelectExitEventArgs eventData)
         {
             _selectState = false;
-            Invoke(nameof(EnableMessagePanel), 1f);
+            _rigidbody.isKinematic = false;
+            if (gameObject.activeSelf)
+            {
+                enableMessageCoroutine = StartCoroutine(EnableMessage());
+            }
         }
 
-        private void EnableMessagePanel()
+        private void MessagePanelToggle(bool state)
         {
-            if (!_boxState && !_selectState)
+            if (!state && enableMessageCoroutine != null)
             {
-                var playerPosition = MainPlayer.Instance.transform.position;
-                _messagePanel.transform.rotation = Quaternion.LookRotation(transform.position - new Vector3(playerPosition.x,
-                    transform.position.y, playerPosition.z), Vector3.up);
-                _messagePanel.SetActive(true);
+                StopCoroutine(enableMessageCoroutine);
             }
+            _messagePanel.SetActive(state);
+        }
+
+        private IEnumerator EnableMessage()
+        {
+            yield return new WaitForSeconds(1f);
+            var playerPosition = MainPlayer.Instance.transform.position;
+            _messagePanel.transform.rotation = Quaternion.LookRotation(transform.position - new Vector3(playerPosition.x,
+                transform.position.y, playerPosition.z), Vector3.up);
+            MessagePanelToggle(true);
         }
 
         public void EnterTheBox()
         {
-            _messagePanel.SetActive(false);
+            MessagePanelToggle(false);
             _boxState = true;
         }
 
@@ -124,17 +132,21 @@ namespace Player
         
         public void AddItemToInventory()
         {
-            _uiInstrumentItem = UiInstrumentPanel.Instance.AddInstrumentItem(this);
+            _uiInstrumentItem = MainMenu.Instance.InstrumentPanel.AddInstrumentItem(this);
             _rigidbody.isKinematic = true;
+            MessagePanelToggle(false);
         }
 
         public void OnRetrieveItemFromInventory()
         {
+            Debug.Log("retrieve Item from inventory: has Ui item? " + _uiInstrumentItem);
             if (_uiInstrumentItem != null)
             {
                 _uiInstrumentItem.OnItemRetrieve();
+                Debug.Log("unset ui item ");
+                _uiInstrumentItem = null;
+                
             }
-
             _rigidbody.isKinematic = false;
         }
     }

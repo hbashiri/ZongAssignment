@@ -11,16 +11,17 @@ namespace Player
 
         [SerializeField] private Transform menuPlaceHolder;
         [SerializeField] private InputActionProperty menuInputAction;
+        [SerializeField] private Transform leftHand;
+        [SerializeField] private Transform rightHand;
         
         private TeleportationProvider _teleportationProvider;
-        private GameObject leftHandGrabItem;
-        private GameObject rightHandGrabItem;
-        
-        public GameObject LeftHandGrabItem => leftHandGrabItem;
-        public GameObject RightHandGrabItem => rightHandGrabItem;
-        public TeleportationProvider TeleportationProvider => _teleportationProvider;
+        private XRGrabInteractable leftHandGrabItem;
+        private XRGrabInteractable rightHandGrabItem;
+
+        public XRGrabInteractable LeftHandGrabItem => leftHandGrabItem;
+        public XRGrabInteractable RightHandGrabItem => rightHandGrabItem;
         public Transform MenuPlaceHolder => menuPlaceHolder;
-        
+
         private void Awake()
         {
             Instance = this;
@@ -28,7 +29,7 @@ namespace Player
             menuInputAction.action.performed += OnMenuClicked;
         }
 
-        public void AssignHandGrabItem(bool isLeft, GameObject item)
+        public void AssignHandGrabItem(bool isLeft, XRGrabInteractable item)
         {
             if (isLeft)
             {
@@ -40,9 +41,40 @@ namespace Player
             }
         }
 
+        public void ReleaseGrabedItem(bool isLeft)
+        {
+            if (isLeft)
+            {
+                leftHandGrabItem = null;
+            }
+            else
+            {
+                rightHandGrabItem = null;
+            }
+        }
+
+        public void ResetToCheckPoint(Transform checkPoint)
+        {
+            TeleportPlayer(checkPoint);
+            MainMenu.Instance.ActivateMainMenu(checkPoint.position,
+                checkPoint.position + checkPoint.forward * 3 + checkPoint.up,
+                checkPoint.rotation);
+        }
+        
+        public void TeleportPlayer(Transform positionTransform)
+        {
+            var teleportationRequest = new TeleportRequest()
+            {
+                destinationPosition = positionTransform.position,
+                destinationRotation = positionTransform.rotation
+            };
+            _teleportationProvider.QueueTeleportRequest(teleportationRequest);
+        }
+        
+
         private void OnMenuClicked(InputAction.CallbackContext inputData)
         {
-            MainMenu.Instance.ToggleMainMenu(MenuPlaceHolder);
+            MainMenu.Instance.ToggleMainMenu();
         }
     }
 }

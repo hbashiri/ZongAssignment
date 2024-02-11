@@ -12,12 +12,8 @@ public class UiInstrumentPanel : MonoBehaviour
     private Action _onSelectInstrument;
 
     public Transform InstrumentSpawnPoint => instrumentSpawnPoint;
-    
-    private void Awake()
-    {
-        Instance = this;
-    }
 
+    
     private void Start()
     {
         GetComponent<Button>().onClick.AddListener(OnInstrumentsClicked);
@@ -45,21 +41,14 @@ public class UiInstrumentPanel : MonoBehaviour
         {
             instrumentBase.AddItemToInventory();
         }
+        MainMenu.Instance.CollapseWeaponCategory();
     }
-    
+
     public UiInstrumentItem AddInstrumentItem(InstrumentBase item)
     {
         var instantiatedItem = Instantiate(uiInstrumentItemPrefab, instrumentsSubCategory.transform);
-        Canvas.ForceUpdateCanvases();
+        LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform) transform);
         instantiatedItem.Setup(this, item);
         return instantiatedItem;
     }
-    
-    
-    
-    ///////////
-    /// statics
-    ///////////
-
-    public static UiInstrumentPanel Instance {get; private set;}
 }

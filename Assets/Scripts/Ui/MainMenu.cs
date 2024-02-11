@@ -1,35 +1,75 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Player;
+using Ui;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
+    [SerializeField] private UiInstrumentPanel uiInstrumentPanel;
+    [SerializeField] private UiWeaponPanel uiWeaponPanel;
     [SerializeField] private GameObject mainMenuPanel;
+    [SerializeField] private float distanceToDisappearMenu;
 
+    private Transform _playerPosition;
+    private Transform _menuPlaceHolder;
     private bool _isOpened;
+    private FadePanel _fadePanelSystem;
+    private Vector3 _playerPositionOnSpawn;
+
+    public static MainMenu Instance { get; private set; }
+    public UiInstrumentPanel InstrumentPanel => uiInstrumentPanel;
+
     private void Awake()
     {
         Instance = this;
+        _fadePanelSystem = GetComponent<FadePanel>();
     }
 
-    public void ActivateMainMenu(Transform menuPosition)
+    private void Start()
     {
-        transform.position = menuPosition.position;
-        transform.rotation = menuPosition.rotation;
+        _playerPosition = MainPlayer.Instance.transform;
+        _menuPlaceHolder = MainPlayer.Instance.MenuPlaceHolder;
+    }
+
+    private void Update()
+    {
+        if (_isOpened && Vector3.Distance(_playerPosition.position, _playerPositionOnSpawn) > distanceToDisappearMenu)
+        {
+            DeactivateMainMenu();
+        }
+    }
+
+    public void ActivateMainMenu()
+    {
+        _playerPositionOnSpawn = MainPlayer.Instance.transform.position;
+        transform.position = _menuPlaceHolder.position;
+        transform.rotation = _menuPlaceHolder.rotation;
         mainMenuPanel.SetActive(true);
+        _fadePanelSystem.FadeIn(()=>{});
+        _isOpened = true;
+    }
+    
+    public void ActivateMainMenu(Vector3 customPosition, Vector3 UIPosition, Quaternion customRotation)
+    {
+        _playerPositionOnSpawn = customPosition;
+        transform.position = UIPosition;
+        transform.rotation = customRotation;
+        mainMenuPanel.SetActive(true);
+        _fadePanelSystem.FadeIn(()=>{});
         _isOpened = true;
     }
 
     public void DeactivateMainMenu()
     {
-        mainMenuPanel.SetActive(false);
-        UiInstrumentPanel.Instance.HideAllInstruments();
+        _fadePanelSystem.FadeOut(()=>mainMenuPanel.SetActive(false));
+        InstrumentPanel.HideAllInstruments();
         _isOpened = false;
     }
 
-    public void ToggleMainMenu(Transform menuPosition)
+    public void ToggleMainMenu()
     {
         if (_isOpened)
         {
@@ -37,13 +77,12 @@ public class MainMenu : MonoBehaviour
         }
         else
         {
-            ActivateMainMenu(menuPosition);
+            ActivateMainMenu();
         }
     }
-    
-    ///////////
-    /// statics
-    ///////////
-    
-    public static MainMenu Instance { get; private set; }
+
+    public void CollapseWeaponCategory()
+    {
+        uiWeaponPanel.CollapseWeaponCategory();
+    }
 }

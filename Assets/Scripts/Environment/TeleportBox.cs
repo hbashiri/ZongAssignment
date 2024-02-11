@@ -14,17 +14,14 @@ namespace Environment
         
         protected override void OnInstrumentEnter(InstrumentBase instrument)
         {
-            var teleportationRequest = new TeleportRequest()
-            {
-                destinationPosition = checkPoint.position,
-                destinationRotation = checkPoint.rotation
-            };
-
-            MainPlayer.Instance.TeleportationProvider.QueueTeleportRequest(teleportationRequest);
+            instrument.AddItemToInventory();
+            instrument.EnterTheBox();
+            MainPlayer.Instance.ResetToCheckPoint(checkPoint);
         }
 
         protected override void OnInstrumentExit(InstrumentBase instrument)
         {
+            instrument.ExitTheBox();
         }
     }
 }
