@@ -50,6 +50,7 @@ public class UiInstrumentPanel : MonoBehaviour
     public UiInstrumentItem AddInstrumentItem(InstrumentBase item)
     {
         var instantiatedItem = Instantiate(uiInstrumentItemPrefab, instrumentsSubCategory.transform);
+        Canvas.ForceUpdateCanvases();
         instantiatedItem.Setup(this, item);
         return instantiatedItem;
     }

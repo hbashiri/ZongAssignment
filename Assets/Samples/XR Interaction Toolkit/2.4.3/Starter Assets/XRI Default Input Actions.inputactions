@@ -761,6 +761,17 @@
                 },
                 {
                     "name": "",
+                    "id": "b839ba02-8e2a-41c3-bec3-f584ec10a7b1",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Activate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "3b8b1b59-2fdc-4998-8259-50341075d9a2",
                     "path": "<XRController>{LeftHand}/trigger",
                     "interactions": "",
@@ -1808,6 +1819,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "UiClicked",
+                    "type": "Button",
+                    "id": "bcdff88c-d77d-4ef1-9b7e-b160e835c369",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -2193,6 +2213,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e26c89df-c874-46f4-861f-80eace1f9c6d",
+                    "path": "<OculusTouchController>{LeftHand}/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UiClicked",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

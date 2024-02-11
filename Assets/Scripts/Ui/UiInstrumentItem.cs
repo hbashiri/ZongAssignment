@@ -26,7 +26,10 @@ public class UiInstrumentItem : MonoBehaviour
 
     public void OnItemRetrieve()
     {
+        _item.ItemSelectionEvent -= OnItemRetrieve;
+        _item = null;
         MainMenu.Instance.DeactivateMainMenu();
+        Debug.Log("Destroy UiItem");
         Destroy(gameObject);
     }
 
@@ -47,12 +50,12 @@ public class UiInstrumentItem : MonoBehaviour
     private void HideInstrument()
     {
         _isOpen = false;
+        if (_item == null) return;
         _item.gameObject.SetActive(false);
     }
 
     private void OnDestroy()
     {
         _uiInstrumentPanel.UnSubscribeOnSelectInstrument(HideInstrument);
-        _item.ItemSelectionEvent -= OnItemRetrieve;
     }
 }

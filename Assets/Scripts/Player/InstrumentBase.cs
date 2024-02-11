@@ -17,11 +17,13 @@ namespace Player
 
         private XRGrabInteractable _grableInteractable;
         private GameObject _messagePanel;
+        private Rigidbody _rigidbody;
         private bool _boxState;
         private bool _selectState;
 
         private void Awake()
         {
+            _rigidbody = GetComponent<Rigidbody>();
             _grableInteractable = GetComponent<XRGrabInteractable>();
             _grableInteractable.firstSelectEntered.AddListener(BallSelected);
             _grableInteractable.lastSelectExited.AddListener(BallUnselected);
@@ -52,7 +54,16 @@ namespace Player
         {
             _selectState = true;
             _messagePanel.SetActive(false);
-            MainMenu.Instance.ActivateMainMenu();
+            Debug.Log(MainMenu.Instance);
+            Debug.Log(MainPlayer.Instance);
+            if (_uiInstrumentItem != null)
+            {
+                OnRetrieveItemFromInventory();
+            }
+            else
+            {
+                MainMenu.Instance.ActivateMainMenu(MainPlayer.Instance.MenuPlaceHolder);
+            }
         }
         
         private void SelectHandRelease(SelectExitEventArgs eventData)
@@ -87,7 +98,6 @@ namespace Player
         {
             _selectState = false;
             Invoke(nameof(EnableMessagePanel), 1f);
-            MainMenu.Instance.DeactivateMainMenu();
         }
 
         private void EnableMessagePanel()
@@ -115,7 +125,7 @@ namespace Player
         public void AddItemToInventory()
         {
             _uiInstrumentItem = UiInstrumentPanel.Instance.AddInstrumentItem(this);
-            // make it kinematic
+            _rigidbody.isKinematic = true;
         }
 
         public void OnRetrieveItemFromInventory()
@@ -124,7 +134,8 @@ namespace Player
             {
                 _uiInstrumentItem.OnItemRetrieve();
             }
-            //make it Cinematic ih ih ih
+
+            _rigidbody.isKinematic = false;
         }
     }
 }
