@@ -2218,8 +2218,8 @@
                 },
                 {
                     "name": "",
-                    "id": "e26c89df-c874-46f4-861f-80eace1f9c6d",
-                    "path": "<OculusTouchController>{LeftHand}/start",
+                    "id": "51f3754c-6574-4451-99ef-12447d29ddb6",
+                    "path": "<XRInputV1::Oculus::OculusTouchControllerOpenXR>{LeftHand}/menu",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

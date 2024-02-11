@@ -19,4 +19,10 @@ public class UiWeaponPanel : MonoBehaviour
         _isOpened = !_isOpened;
         weaponsSubCategory.SetActive(_isOpened);
     }
+
+    public void CollapseWeaponCategory()
+    {
+        _isOpened = false;
+        weaponsSubCategory.SetActive(_isOpened);
+    }
 }
