@@ -27,7 +27,6 @@ public class UiInstrumentItem : MonoBehaviour
     {
         _item = null;
         MainMenu.Instance.DeactivateMainMenu();
-        Debug.Log("Destroy UiItem");
         Destroy(gameObject);
     }
 

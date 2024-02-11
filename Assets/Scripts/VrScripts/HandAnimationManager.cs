@@ -49,13 +49,5 @@ namespace VrScripts
             _audioSource.Play();
         }
         
-        private void Update()
-        {
-            // float triggerValue = pinchAnimationAction.action.ReadValue<float>();
-            // _handAnimator.SetFloat("Trigger", triggerValue);
-            //
-            // float gripValue = gripAnimationAction.action.ReadValue<float>();
-            // _handAnimator.SetFloat("Trigger", gripValue);
-        }
     }
 }

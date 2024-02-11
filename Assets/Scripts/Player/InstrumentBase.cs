@@ -40,18 +40,47 @@ namespace Player
             _messagePanel.GetComponentInChildren<TextMeshPro>().text = message;
             _messagePanel.transform.GetChild(0).transform.localPosition = panelPositionOffset;
         }
-        
-        public Sprite GetIconImage()
-        {
-            return iconImage;
-        }
 
         private void Update()
         {
             _messagePanel.transform.position = transform.position;
         }
 
-        private void BallSelected(SelectEnterEventArgs eventData)
+        public Sprite GetIconImage()
+        {
+            return iconImage;
+        }
+        
+        public void EnterTheBox()
+        {
+            MessagePanelToggle(false);
+            _boxState = true;
+        }
+
+        public void ExitTheBox()
+        {
+            _boxState = false;
+        }
+        
+        public void AddItemToInventory()
+        {
+            _uiInstrumentItem = MainMenu.Instance.InstrumentPanel.AddInstrumentItem(this);
+            _rigidbody.isKinematic = true;
+            MessagePanelToggle(false);
+        }
+
+        public void OnRetrieveItemFromInventory()
+        {
+            if (_uiInstrumentItem != null)
+            {
+                _uiInstrumentItem.OnItemRetrieve();
+                _uiInstrumentItem = null;
+                
+            }
+            _rigidbody.isKinematic = false;
+        }
+        
+                private void BallSelected(SelectEnterEventArgs eventData)
         {
             _selectState = true;
             MessagePanelToggle(false);
@@ -116,37 +145,6 @@ namespace Player
             _messagePanel.transform.rotation = Quaternion.LookRotation(transform.position - new Vector3(playerPosition.x,
                 transform.position.y, playerPosition.z), Vector3.up);
             MessagePanelToggle(true);
-        }
-
-        public void EnterTheBox()
-        {
-            MessagePanelToggle(false);
-            _boxState = true;
-        }
-
-        public void ExitTheBox()
-        {
-            _boxState = false;
-        }
-        
-        public void AddItemToInventory()
-        {
-            _uiInstrumentItem = MainMenu.Instance.InstrumentPanel.AddInstrumentItem(this);
-            _rigidbody.isKinematic = true;
-            MessagePanelToggle(false);
-        }
-
-        public void OnRetrieveItemFromInventory()
-        {
-            Debug.Log("retrieve Item from inventory: has Ui item? " + _uiInstrumentItem);
-            if (_uiInstrumentItem != null)
-            {
-                _uiInstrumentItem.OnItemRetrieve();
-                Debug.Log("unset ui item ");
-                _uiInstrumentItem = null;
-                
-            }
-            _rigidbody.isKinematic = false;
         }
     }
 }
